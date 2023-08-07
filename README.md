@@ -43,11 +43,13 @@ The Lambda function exposes a GraphQL API, connecting to a PostgreSQL database t
 
 1. Clone the repository & Install dependencies
 
-`git clone https://github.com/devinobrien-css/advanced-search.git`
+```
+  git clone https://github.com/devinobrien-css/advanced-search.git
 
-`cd advanced-search-example`
+  cd advanced-search-example
 
-`npm install`
+  npm install
+```
 
 2. Use Docker to build the Postgres instance
 
