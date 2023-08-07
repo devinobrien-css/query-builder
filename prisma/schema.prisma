@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nexusPrisma {
+  provider = "nexus-prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model documents {
+  document_id              Int                        @id @default(autoincrement())
+  title                    String                     @unique @db.VarChar(255)
+  expiration               DateTime?                  @db.Timestamp(6)
+  user_document_connection user_document_connection[]
+}
+
+model programs {
+  program_id              Int                       @id @default(autoincrement())
+  title                   String                    @unique @db.VarChar(255)
+  start_date              DateTime?                 @db.Timestamp(6)
+  user_program_connection user_program_connection[]
+}
+
+model user_document_connection {
+  user_id     Int
+  document_id Int
+  grant_date  DateTime? @db.Timestamp(6)
+  documents   documents @relation(fields: [document_id], references: [document_id], onDelete: NoAction, onUpdate: NoAction)
+  users       users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, document_id])
+}
+
+model user_program_connection {
+  user_id    Int
+  program_id Int
+  grant_date DateTime? @db.Timestamp(6)
+  programs   programs  @relation(fields: [program_id], references: [program_id], onDelete: NoAction, onUpdate: NoAction)
+  users      users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, program_id])
+}
+
+model users {
+  user_id                  Int                        @id @default(autoincrement())
+  first                    String                     @db.VarChar(30)
+  last                     String                     @db.VarChar(30)
+  email                    String                     @db.VarChar(60)
+  user_document_connection user_document_connection[]
+  user_program_connection  user_program_connection[]
+}
