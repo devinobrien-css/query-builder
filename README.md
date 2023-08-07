@@ -41,7 +41,7 @@ The Lambda function exposes a GraphQL API, connecting to a PostgreSQL database t
 
 ## Getting Started
 
-1. Clone the repository & Install dependencies
+### 1. Clone the repository & Install dependencies
 
 ```
   git clone https://github.com/devinobrien-css/advanced-search.git
@@ -51,12 +51,14 @@ The Lambda function exposes a GraphQL API, connecting to a PostgreSQL database t
   npm install
 ```
 
-2. Use Docker to build the Postgres instance
+### 2. Use Docker to build the Postgres instance
 
 This example uses a local instance of Postgres. 
 Run docker compose up to launch the database at `localhost:5432`
 
-`docker-compose up -d`
+```
+    docker-compose up -d
+```
 
 Your PostgreSQL database should now be up and running. 
 You can access it using your preferred PostgreSQL client or 
@@ -68,7 +70,7 @@ command-line tool with the following connection details:
 * **Password**: temporary
 * **Database**: LocalDatabase
 
-3. Set up Prisma:
+### 3. Set up Prisma:
 
 Generate Prisma client:
 
