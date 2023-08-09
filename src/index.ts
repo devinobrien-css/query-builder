@@ -1,24 +1,14 @@
 import { ApolloServer } from '@apollo/server';
 import { PrismaClient } from '@prisma/client'
 import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
-import { makeSchema, objectType }  from 'nexus'
-import { users } from 'nexus-prisma'
+import { schema } from '../graphql/schema';
 
-const prisma = new PrismaClient();
-
-const schema = makeSchema({
-    types: [
-        objectType({
-            name : users.$name,
-            definition(t) {
-                t.field(users.first)
-            }
-        })
-    ]
-})
-
+export const prisma = new PrismaClient();
 const server = new ApolloServer({
     schema,
+    introspection: true,
 });
 
-export const graphqlHandler = startServerAndCreateLambdaHandler(server)
+export const graphqlHandler = startServerAndCreateLambdaHandler(server, {
+    context: async() => prisma
+});

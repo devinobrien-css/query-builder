@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 generator nexusPrisma {
@@ -8,48 +9,24 @@ generator nexusPrisma {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:temporary@sampledatabase.cst05k8g370k.us-east-1.rds.amazonaws.com:5432/"
 }
 
-model documents {
-  document_id              Int                        @id @default(autoincrement())
-  title                    String                     @unique @db.VarChar(255)
-  expiration               DateTime?                  @db.Timestamp(6)
-  user_document_connection user_document_connection[]
+model address {
+  addressid    Int        @id @default(autoincrement())
+  individualid Int
+  type         String     @db.VarChar(255)
+  line1        String     @db.VarChar(255)
+  city         String     @db.VarChar(255)
+  state        String     @db.VarChar(255)
+  zip          String     @db.VarChar(11)
+  individual   individual @relation(fields: [individualid], references: [individualid], onDelete: NoAction, onUpdate: NoAction, map: "individual_address_fk")
 }
 
-model programs {
-  program_id              Int                       @id @default(autoincrement())
-  title                   String                    @unique @db.VarChar(255)
-  start_date              DateTime?                 @db.Timestamp(6)
-  user_program_connection user_program_connection[]
-}
-
-model user_document_connection {
-  user_id     Int
-  document_id Int
-  grant_date  DateTime? @db.Timestamp(6)
-  documents   documents @relation(fields: [document_id], references: [document_id], onDelete: NoAction, onUpdate: NoAction)
-  users       users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([user_id, document_id])
-}
-
-model user_program_connection {
-  user_id    Int
-  program_id Int
-  grant_date DateTime? @db.Timestamp(6)
-  programs   programs  @relation(fields: [program_id], references: [program_id], onDelete: NoAction, onUpdate: NoAction)
-  users      users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([user_id, program_id])
-}
-
-model users {
-  user_id                  Int                        @id @default(autoincrement())
-  first                    String                     @db.VarChar(30)
-  last                     String                     @db.VarChar(30)
-  email                    String                     @db.VarChar(60)
-  user_document_connection user_document_connection[]
-  user_program_connection  user_program_connection[]
+model individual {
+  individualid Int       @id @default(autoincrement())
+  firstname    String?   @db.VarChar(255)
+  lastname     String?   @db.VarChar(255)
+  email        String?   @db.VarChar(255)
+  address      address[]
 }

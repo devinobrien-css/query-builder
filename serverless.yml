@@ -6,7 +6,7 @@ provider:
     cors: true
 functions:
   graphql:
-    handler: index.graphqlHandler 
+    handler: src/index.graphqlHandler 
     events:
       - httpApi:
           path: /
